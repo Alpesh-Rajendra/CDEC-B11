@@ -1,0 +1,6 @@
+Hello snehal here!
+i am creating this file for practical purpose 
+topic: fork and pull request 
+purpose to understand how to fork a repository, make changes and create a pull request on github
+
+Thank you!
