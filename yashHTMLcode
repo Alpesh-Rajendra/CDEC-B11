@@ -1,0 +1,1161 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DevOps Control Center</title>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg: #0b1020;
+  --panel: #121a2c;
+  --border: #26344b;
+  --text: #e5edf9;
+  --muted: #91a0b8;
+  --blue: #60a5fa;
+  --green: #34d399;
+  --red: #fb7185;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+header {
+  padding: 20px 5%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  border-bottom: 1px solid var(--border);
+  background: #0d1425;
+}
+
+.logo {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.logo span {
+  color: var(--blue);
+}
+
+.live {
+  color: var(--green);
+  font-size: 13px;
+}
+
+.container {
+  width: 90%;
+  max-width: 1250px;
+  margin: 32px auto;
+}
+
+h1 {
+  font-size: 30px;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  color: var(--muted);
+  margin-bottom: 28px;
+  line-height: 1.6;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 22px;
+}
+
+.metric-label {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.metric {
+  font-size: 29px;
+  font-weight: bold;
+  margin: 15px 0 8px;
+}
+
+.green { color: var(--green); }
+.blue { color: var(--blue); }
+.red { color: var(--red); }
+
+.small {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.section {
+  margin-top: 28px;
+}
+
+.section h2 {
+  font-size: 19px;
+  margin-bottom: 16px;
+}
+
+.pipeline {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.stage {
+  padding: 18px;
+  border: 1px solid var(--border);
+  background: #0f1728;
+  border-radius: 10px;
+}
+
+.stage .icon {
+  font-size: 25px;
+  margin-bottom: 12px;
+}
+
+.stage h3 {
+  font-size: 15px;
+  margin-bottom: 8px;
+}
+
+.stage p {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.status {
+  display: inline-block;
+  font-size: 11px;
+  margin-top: 14px;
+  padding: 5px 8px;
+  border-radius: 5px;
+  background: #18382f;
+  color: var(--green);
+}
+
+.status.pending {
+  background: #352b1d;
+  color: #fbbf24;
+}
+
+button {
+  border: none;
+  border-radius: 7px;
+  padding: 11px 16px;
+  font-size: 13px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+button:hover {
+  opacity: 0.85;
+  transform: translateY(-1px);
+}
+
+.primary {
+  background: var(--blue);
+  color: #07111f;
+}
+
+.secondary {
+  background: #26344b;
+  color: var(--text);
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: wait;
+  transform: none;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.two-columns {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 18px;
+}
+
+.service {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 15px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+}
+
+.service:last-child {
+  border-bottom: none;
+}
+
+.dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background: var(--green);
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+.terminal {
+  background: #080d17;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  padding: 17px;
+  font-family: Consolas, monospace;
+  font-size: 12px;
+  line-height: 1.9;
+  min-height: 190px;
+  overflow-wrap: anywhere;
+}
+
+.terminal-title {
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+
+.prompt { color: var(--green); }
+.output { color: #cbd5e1; }
+
+.progress {
+  width: 100%;
+  height: 6px;
+  background: #273249;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 13px;
+}
+
+.bar {
+  height: 100%;
+  width: 0%;
+  background: var(--blue);
+  transition: width 0.3s;
+}
+
+footer {
+  text-align: center;
+  padding: 30px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+@media (max-width: 850px) {
+  .grid { grid-template-columns: repeat(2, 1fr); }
+  .pipeline { grid-template-columns: repeat(2, 1fr); }
+  .two-columns { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 480px) {
+  .grid, .pipeline { grid-template-columns: 1fr; }
+  .container { width: 92%; }
+  h1 { font-size: 25px; }
+  header { align-items: flex-start; flex-direction: column; }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">⚙ DevOps<span>Control</span></div>
+  <div class="live">● DEMO ENVIRONMENT</div>
+</header>
+
+<main class="container">
+
+  <h1>DevOps Dashboard 🚀</h1>
+  <p class="subtitle">
+    Monitor your infrastructure, manage deployments and explore
+    your CI/CD workflow from one place.
+  </p>
+
+  <div class="grid">
+    <div class="card">
+      <div class="metric-label">EC2 Instances</div>
+      <div class="metric blue" id="ec2">3</div>
+      <div class="small">Simulated instances</div>
+    </div>
+
+    <div class="card">
+      <div class="metric-label">Build Success Rate</div>
+      <div class="metric green" id="success">96%</div>
+      <div class="small">Sample project metric</div>
+    </div>
+
+    <div class="card">
+      <div class="metric-label">Docker Containers</div>
+      <div class="metric" id="containers">6</div>
+      <div class="small">Simulated running containers</div>
+    </div>
+
+    <div class="card">
+      <div class="metric-label">Active Alerts</div>
+      <div class="metric green" id="alerts">0</div>
+      <div class="small">Demo alert counter</div>
+    </div>
+  </div>
+
+  <section class="section">
+    <h2>⚡ CI/CD Pipeline</h2>
+
+    <div class="toolbar">
+      <button class="primary" id="deployBtn" onclick="runPipeline()">
+        ▶ Run Pipeline
+      </button>
+      <button class="secondary" onclick="resetPipeline()">
+        ↻ Reset Pipeline
+      </button>
+    </div>
+
+    <div class="pipeline">
+      <div class="stage">
+        <div class="icon">📦</div>
+        <h3>1. Source</h3>
+        <p>Get application code from Git.</p>
+        <div class="status" id="s1">READY</div>
+      </div>
+
+      <div class="stage">
+        <div class="icon">🧪</div>
+        <h3>2. Test & Build</h3>
+        <p>Run tests and prepare the build.</p>
+        <div class="status" id="s2">WAITING</div>
+      </div>
+
+      <div class="stage">
+        <div class="icon">🐳</div>
+        <h3>3. Docker</h3>
+        <p>Simulate building a container image.</p>
+        <div class="status" id="s3">WAITING</div>
+      </div>
+
+      <div class="stage">
+        <div class="icon">🚀</div>
+        <h3>4. Deploy</h3>
+        <p>Simulate deployment to an environment.</p>
+        <div class="status" id="s4">WAITING</div>
+      </div>
+    </div>
+
+    <div class="progress">
+      <div class="bar" id="progressBar"></div>
+    </div>
+    <p class="small" id="pipelineMessage" style="margin-top:10px">
+      Ready to start your demo pipeline.
+    </p>
+  </section>
+
+  <section class="section two-columns">
+
+    <div class="card">
+      <h2>☁ Infrastructure Status</h2>
+
+      <div class="service">
+        <span>☁ AWS EC2</span>
+        <span><i class="dot"></i>Demo healthy</span>
+      </div>
+
+      <div class="service">
+        <span>🐳 Docker</span>
+        <span><i class="dot"></i>Demo healthy</span>
+      </div>
+
+      <div class="service">
+        <span>☸ Kubernetes</span>
+        <span><i class="dot"></i>Demo healthy</span>
+      </div>
+
+      <div class="service">
+        <span>📊 Monitoring</span>
+        <span><i class="dot"></i>Demo healthy</span>
+      </div>
+
+      <p class="small" style="margin-top:16px">
+        These statuses are examples, not live infrastructure checks.
+      </p>
+    </div>
+
+    <div class="card">
+      <h2>💻 DevOps Terminal</h2>
+      <div class="terminal">
+        <div class="terminal-title">demo@devops-server: ~</div>
+        <div id="terminalOutput">
+          <div class="output">Welcome to DevOps Control!</div>
+          <div class="output">Select a command below.</div>
+        </div>
+      </div>
+
+      <div class="toolbar" style="margin-top:14px">
+        <button class="secondary" onclick="runCommand('git')">Git</button>
+        <button class="secondary" onclick="runCommand('docker')">Docker</button>
+        <button class="secondary" onclick="runCommand('aws')">AWS CLI</button>
+        <button class="secondary" onclick="runCommand('linux')">Linux</button>
+      </div>
+    </div>
+
+  </section>
+
+  <section class="section card">
+    <h2>🛠 DevOps Toolkit</h2>
+    <div class="grid">
+      <div>
+        <div class="metric">🐙</div>
+        <strong>Git & GitHub</strong>
+        <p class="small" style="margin-top:8px">Version control</p>
+      </div>
+      <div>
+        <div class="metric">🐳</div>
+        <strong>Docker</strong>
+        <p class="small" style="margin-top:8px">Containerization</p>
+      </div>
+      <div>
+        <div class="metric">☸️</div>
+        <strong>Kubernetes</strong>
+        <p class="small" style="margin-top:8px">Container orchestration</p>
+      </div>
+      <div>
+        <div class="metric">☁️</div>
+        <strong>AWS</strong>
+        <p class="small" style="margin-top:8px">Cloud infrastructure</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  DevOps Control Center · Learning Project · Demo Data Only
+</footer>
+
+<script>
+const stages = ["s1", "s2", "s3", "s4"];
+let pipelineRunning = false;
+let pipelineToken = 0;
+
+function setStage(id, text, pending = false) {
+  const element = document.getElementById(id);
+  element.textContent = text;
+  element.className = pending ? "status pending" : "status";
+}
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function runPipeline() {
+  if (pipelineRunning) return;
+
+  pipelineRunning = true;
+  const token = ++pipelineToken;
+  const button = document.getElementById("deployBtn");
+  button.disabled = true;
+  button.textContent = "⏳ Pipeline Running...";
+
+  const labels = ["Source", "Test & Build", "Docker", "Deploy"];
+  const messages = [
+    "Fetching source code...",
+    "Running tests and preparing build...",
+    "Building simulated Docker image...",
+    "Simulating application deployment..."
+  ];
+
+  stages.forEach(id => setStage(id, "WAITING", true));
+  document.getElementById("progressBar").style.width = "0%";
+
+  for (let i = 0; i < stages.length; i++) {
+    if (token !== pipelineToken) return;
+
+    setStage(stages[i], "RUNNING", true);
+    document.getElementById("pipelineMessage").textContent =
+      labels[i] + ": " + messages[i];
+
+    await sleep(900);
+
+    if (token !== pipelineToken) return;
+
+    setStage(stages[i], "SUCCESS");
+    document.getElementById("progressBar").style.width =
+      ((i + 1) * 25) + "%";
+  }
+
+  document.getElementById("pipelineMessage").textContent =
+    "✓ Demo pipeline completed successfully!";
+
+  pipelineRunning = false;
+  button.disabled = false;
+  button.textContent = "▶ Run Pipeline";
+}
+
+function resetPipeline() {
+  pipelineToken++;
+  pipelineRunning = false;
+
+  stages.forEach((id, i) => {
+    setStage(id, i === 0 ? "READY" : "WAITING", i !== 0);
+  });
+
+  document.getElementById("progressBar").style.width = "0%";
+  document.getElementById("pipelineMessage").textContent =
+    "Pipeline reset. Ready for another demo.";
+
+  const button = document.getElementById("deployBtn");
+  button.disabled = false;
+  button.textContent = "▶ Run Pipeline";
+}
+
+const commands = {
+  git: [
+    "$ git status",
+    "On branch main",
+    "Your working tree is clean.",
+    "",
+    "$ git log -1 --oneline",
+    "a1b2c3d Demo commit (example)"
+  ],
+  docker: [
+    "$ docker ps",
+    "CONTAINER ID   IMAGE       STATUS",
+    "demo123        nginx       Up (example)",
+    "",
+    "Note: simulated output; Docker was not executed."
+  ],
+  aws: [
+    "$ aws sts get-caller-identity",
+    "Demo output only.",
+    "Configure AWS CLI and credentials to run this command.",
+    "No AWS API request was sent."
+  ],
+  linux: [
+    "$ uptime",
+    "up 2 days, 3 hours (example)",
+    "",
+    "$ df -h",
+    "Filesystem usage output (example)",
+    "Note: simulated output; Linux was not queried."
+  ]
+};
+
+function runCommand(type) {
+  const terminal = document.getElementById("terminalOutput");
+  terminal.innerHTML = "";
+
+  commands[type].forEach(line => {
+    const row = document.createElement("div");
+    row.className = line.startsWith("$") ? "prompt" : "output";
+    row.textContent = line || "\u00a0";
+    terminal.appendChild(row);
+  });
+}
+</script>
+
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DevOps Control Center</title>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg: #0b1020;
+  --panel: #121a2c;
+  --border: #26344b;
+  --text: #e5edf9;
+  --muted: #91a0b8;
+  --blue: #60a5fa;
+  --green: #34d399;
+  --red: #fb7185;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+header {
+  padding: 20px 5%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  border-bottom: 1px solid var(--border);
+  background: #0d1425;
+}
+
+.logo {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.logo span {
+  color: var(--blue);
+}
+
+.live {
+  color: var(--green);
+  font-size: 13px;
+}
+
+.container {
+  width: 90%;
+  max-width: 1250px;
+  margin: 32px auto;
+}
+
+h1 {
+  font-size: 30px;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  color: var(--muted);
+  margin-bottom: 28px;
+  line-height: 1.6;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 22px;
+}
+
+.metric-label {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.metric {
+  font-size: 29px;
+  font-weight: bold;
+  margin: 15px 0 8px;
+}
+
+.green { color: var(--green); }
+.blue { color: var(--blue); }
+.red { color: var(--red); }
+
+.small {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.section {
+  margin-top: 28px;
+}
+
+.section h2 {
+  font-size: 19px;
+  margin-bottom: 16px;
+}
+
+.pipeline {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.stage {
+  padding: 18px;
+  border: 1px solid var(--border);
+  background: #0f1728;
+  border-radius: 10px;
+}
+
+.stage .icon {
+  font-size: 25px;
+  margin-bottom: 12px;
+}
+
+.stage h3 {
+  font-size: 15px;
+  margin-bottom: 8px;
+}
+
+.stage p {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.status {
+  display: inline-block;
+  font-size: 11px;
+  margin-top: 14px;
+  padding: 5px 8px;
+  border-radius: 5px;
+  background: #18382f;
+  color: var(--green);
+}
+
+.status.pending {
+  background: #352b1d;
+  color: #fbbf24;
+}
+
+button {
+  border: none;
+  border-radius: 7px;
+  padding: 11px 16px;
+  font-size: 13px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+button:hover {
+  opacity: 0.85;
+  transform: translateY(-1px);
+}
+
+.primary {
+  background: var(--blue);
+  color: #07111f;
+}
+
+.secondary {
+  background: #26344b;
+  color: var(--text);
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: wait;
+  transform: none;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.two-columns {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 18px;
+}
+
+.service {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 15px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+}
+
+.service:last-child {
+  border-bottom: none;
+}
+
+.dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background: var(--green);
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+.terminal {
+  background: #080d17;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  padding: 17px;
+  font-family: Consolas, monospace;
+  font-size: 12px;
+  line-height: 1.9;
+  min-height: 190px;
+  overflow-wrap: anywhere;
+}
+
+.terminal-title {
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+
+.prompt { color: var(--green); }
+.output { color: #cbd5e1; }
+
+.progress {
+  width: 100%;
+  height: 6px;
+  background: #273249;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 13px;
+}
+
+.bar {
+  height: 100%;
+  width: 0%;
+  background: var(--blue);
+  transition: width 0.3s;
+}
+
+footer {
+  text-align: center;
+  padding: 30px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+@media (max-width: 850px) {
+  .grid { grid-template-columns: repeat(2, 1fr); }
+  .pipeline { grid-template-columns: repeat(2, 1fr); }
+  .two-columns { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 480px) {
+  .grid, .pipeline { grid-template-columns: 1fr; }
+  .container { width: 92%; }
+  h1 { font-size: 25px; }
+  header { align-items: flex-start; flex-direction: column; }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">⚙ DevOps<span>Control</span></div>
+  <div class="live">● DEMO ENVIRONMENT</div>
+</header>
+
+<main class="container">
+
+  <h1>DevOps Dashboard 🚀</h1>
+  <p class="subtitle">
+    Monitor your infrastructure, manage deployments and explore
+    your CI/CD workflow from one place.
+  </p>
+
+  <div class="grid">
+    <div class="card">
+      <div class="metric-label">EC2 Instances</div>
+      <div class="metric blue" id="ec2">3</div>
+      <div class="small">Simulated instances</div>
+    </div>
+
+    <div class="card">
+      <div class="metric-label">Build Success Rate</div>
+      <div class="metric green" id="success">96%</div>
+      <div class="small">Sample project metric</div>
+    </div>
+
+    <div class="card">
+      <div class="metric-label">Docker Containers</div>
+      <div class="metric" id="containers">6</div>
+      <div class="small">Simulated running containers</div>
+    </div>
+
+    <div class="card">
+      <div class="metric-label">Active Alerts</div>
+      <div class="metric green" id="alerts">0</div>
+      <div class="small">Demo alert counter</div>
+    </div>
+  </div>
+
+  <section class="section">
+    <h2>⚡ CI/CD Pipeline</h2>
+
+    <div class="toolbar">
+      <button class="primary" id="deployBtn" onclick="runPipeline()">
+        ▶ Run Pipeline
+      </button>
+      <button class="secondary" onclick="resetPipeline()">
+        ↻ Reset Pipeline
+      </button>
+    </div>
+
+    <div class="pipeline">
+      <div class="stage">
+        <div class="icon">📦</div>
+        <h3>1. Source</h3>
+        <p>Get application code from Git.</p>
+        <div class="status" id="s1">READY</div>
+      </div>
+
+      <div class="stage">
+        <div class="icon">🧪</div>
+        <h3>2. Test & Build</h3>
+        <p>Run tests and prepare the build.</p>
+        <div class="status" id="s2">WAITING</div>
+      </div>
+
+      <div class="stage">
+        <div class="icon">🐳</div>
+        <h3>3. Docker</h3>
+        <p>Simulate building a container image.</p>
+        <div class="status" id="s3">WAITING</div>
+      </div>
+
+      <div class="stage">
+        <div class="icon">🚀</div>
+        <h3>4. Deploy</h3>
+        <p>Simulate deployment to an environment.</p>
+        <div class="status" id="s4">WAITING</div>
+      </div>
+    </div>
+
+    <div class="progress">
+      <div class="bar" id="progressBar"></div>
+    </div>
+    <p class="small" id="pipelineMessage" style="margin-top:10px">
+      Ready to start your demo pipeline.
+    </p>
+  </section>
+
+  <section class="section two-columns">
+
+    <div class="card">
+      <h2>☁ Infrastructure Status</h2>
+
+      <div class="service">
+        <span>☁ AWS EC2</span>
+        <span><i class="dot"></i>Demo healthy</span>
+      </div>
+
+      <div class="service">
+        <span>🐳 Docker</span>
+        <span><i class="dot"></i>Demo healthy</span>
+      </div>
+
+      <div class="service">
+        <span>☸ Kubernetes</span>
+        <span><i class="dot"></i>Demo healthy</span>
+      </div>
+
+      <div class="service">
+        <span>📊 Monitoring</span>
+        <span><i class="dot"></i>Demo healthy</span>
+      </div>
+
+      <p class="small" style="margin-top:16px">
+        These statuses are examples, not live infrastructure checks.
+      </p>
+    </div>
+
+    <div class="card">
+      <h2>💻 DevOps Terminal</h2>
+      <div class="terminal">
+        <div class="terminal-title">demo@devops-server: ~</div>
+        <div id="terminalOutput">
+          <div class="output">Welcome to DevOps Control!</div>
+          <div class="output">Select a command below.</div>
+        </div>
+      </div>
+
+      <div class="toolbar" style="margin-top:14px">
+        <button class="secondary" onclick="runCommand('git')">Git</button>
+        <button class="secondary" onclick="runCommand('docker')">Docker</button>
+        <button class="secondary" onclick="runCommand('aws')">AWS CLI</button>
+        <button class="secondary" onclick="runCommand('linux')">Linux</button>
+      </div>
+    </div>
+
+  </section>
+
+  <section class="section card">
+    <h2>🛠 DevOps Toolkit</h2>
+    <div class="grid">
+      <div>
+        <div class="metric">🐙</div>
+        <strong>Git & GitHub</strong>
+        <p class="small" style="margin-top:8px">Version control</p>
+      </div>
+      <div>
+        <div class="metric">🐳</div>
+        <strong>Docker</strong>
+        <p class="small" style="margin-top:8px">Containerization</p>
+      </div>
+      <div>
+        <div class="metric">☸️</div>
+        <strong>Kubernetes</strong>
+        <p class="small" style="margin-top:8px">Container orchestration</p>
+      </div>
+      <div>
+        <div class="metric">☁️</div>
+        <strong>AWS</strong>
+        <p class="small" style="margin-top:8px">Cloud infrastructure</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  DevOps Control Center · Learning Project · Demo Data Only
+</footer>
+
+<script>
+const stages = ["s1", "s2", "s3", "s4"];
+let pipelineRunning = false;
+let pipelineToken = 0;
+
+function setStage(id, text, pending = false) {
+  const element = document.getElementById(id);
+  element.textContent = text;
+  element.className = pending ? "status pending" : "status";
+}
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function runPipeline() {
+  if (pipelineRunning) return;
+
+  pipelineRunning = true;
+  const token = ++pipelineToken;
+  const button = document.getElementById("deployBtn");
+  button.disabled = true;
+  button.textContent = "⏳ Pipeline Running...";
+
+  const labels = ["Source", "Test & Build", "Docker", "Deploy"];
+  const messages = [
+    "Fetching source code...",
+    "Running tests and preparing build...",
+    "Building simulated Docker image...",
+    "Simulating application deployment..."
+  ];
+
+  stages.forEach(id => setStage(id, "WAITING", true));
+  document.getElementById("progressBar").style.width = "0%";
+
+  for (let i = 0; i < stages.length; i++) {
+    if (token !== pipelineToken) return;
+
+    setStage(stages[i], "RUNNING", true);
+    document.getElementById("pipelineMessage").textContent =
+      labels[i] + ": " + messages[i];
+
+    await sleep(900);
+
+    if (token !== pipelineToken) return;
+
+    setStage(stages[i], "SUCCESS");
+    document.getElementById("progressBar").style.width =
+      ((i + 1) * 25) + "%";
+  }
+
+  document.getElementById("pipelineMessage").textContent =
+    "✓ Demo pipeline completed successfully!";
+
+  pipelineRunning = false;
+  button.disabled = false;
+  button.textContent = "▶ Run Pipeline";
+}
+
+function resetPipeline() {
+  pipelineToken++;
+  pipelineRunning = false;
+
+  stages.forEach((id, i) => {
+    setStage(id, i === 0 ? "READY" : "WAITING", i !== 0);
+  });
+
+  document.getElementById("progressBar").style.width = "0%";
+  document.getElementById("pipelineMessage").textContent =
+    "Pipeline reset. Ready for another demo.";
+
+  const button = document.getElementById("deployBtn");
+  button.disabled = false;
+  button.textContent = "▶ Run Pipeline";
+}
+
+const commands = {
+  git: [
+    "$ git status",
+    "On branch main",
+    "Your working tree is clean.",
+    "",
+    "$ git log -1 --oneline",
+    "a1b2c3d Demo commit (example)"
+  ],
+  docker: [
+    "$ docker ps",
+    "CONTAINER ID   IMAGE       STATUS",
+    "demo123        nginx       Up (example)",
+    "",
+    "Note: simulated output; Docker was not executed."
+  ],
+  aws: [
+    "$ aws sts get-caller-identity",
+    "Demo output only.",
+    "Configure AWS CLI and credentials to run this command.",
+    "No AWS API request was sent."
+  ],
+  linux: [
+    "$ uptime",
+    "up 2 days, 3 hours (example)",
+    "",
+    "$ df -h",
+    "Filesystem usage output (example)",
+    "Note: simulated output; Linux was not queried."
+  ]
+};
+
+function runCommand(type) {
+  const terminal = document.getElementById("terminalOutput");
+  terminal.innerHTML = "";
+
+  commands[type].forEach(line => {
+    const row = document.createElement("div");
+    row.className = line.startsWith("$") ? "prompt" : "output";
+    row.textContent = line || "\u00a0";
+    terminal.appendChild(row);
+  });
+}
+</script>
+
+</body>
+</html>
+
