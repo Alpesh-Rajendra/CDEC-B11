@@ -1,0 +1,71 @@
+# AWS Static Website Hosting
+
+## Project Overview
+This project demonstrates how to create and host a static website using AWS cloud services.
+
+## Objectives
+- Understand cloud computing fundamentals.
+- Learn static website hosting.
+- Explore AWS infrastructure and deployment.
+- Practice Git and GitHub version control.
+
+## Technologies Used
+- AWS
+- Amazon S3
+- HTML5
+- CSS3
+- Git
+- GitHub
+
+## Project Workflow
+1. Create a static website using HTML and CSS.
+2. Create an Amazon S3 bucket.
+3. Configure static website hosting.
+4. Upload website files to the bucket.
+5. Configure permissions securely.
+6. Test the website endpoint.
+
+## Skills Learned
+- Cloud Computing
+- AWS S3
+- Website Hosting
+- Git & GitHub
+- Basic Cloud Deployment
+
+## Author
+Aspiring DevOps Engineer# AWS Static Website Hosting
+
+## Project Overview
+This project demonstrates how to create and host a static website using AWS cloud services.
+
+## Objectives
+- Understand cloud computing fundamentals.
+- Learn static website hosting.
+- Explore AWS infrastructure and deployment.
+- Practice Git and GitHub version control.
+
+## Technologies Used
+- AWS
+- Amazon S3
+- HTML5
+- CSS3
+- Git
+- GitHub
+
+## Project Workflow
+1. Create a static website using HTML and CSS.
+2. Create an Amazon S3 bucket.
+3. Configure static website hosting.
+4. Upload website files to the bucket.
+5. Configure permissions securely.
+6. Test the website endpoint.
+
+## Skills Learned
+- Cloud Computing
+- AWS S3
+- Website Hosting
+- Git & GitHub
+- Basic Cloud Deployment
+
+## Author
+Aspiring DevOps Engineer
